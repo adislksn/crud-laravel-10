@@ -33,9 +33,7 @@ class SiswaController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        Session::flash('nama', $request->nama);
-        Session::flash('nomor_induk', $request->nomor_induk);
-        Session::flash('alamat', $request->alamat);
+        $this->flash($request);
 
         $this->validate($request,[
             'nama'       => 'required',
@@ -69,17 +67,28 @@ class SiswaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id):View
     {
-        //
+        $data = siswa::where('nomor_induk', $id)->first();
+        $this->flash($data);
+        return view("siswa.edit")->with('data', $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id):RedirectResponse
     {
-        //
+        $data = $this->validate($request,[
+            'nama'       => 'required',
+            'alamat'     => 'required'
+        ],[
+            'nama.required' => 'Nama wajib diisi',
+            'nomor_induk.numeric' => 'NIM berupa angka',
+            'alamat.required' => 'Alamat wajib diisi',
+        ]);
+        siswa::where('nomor_induk', $id)->update($data);
+        return redirect()->route('siswa.index')->with('success', 'Data berhasil diubah');
     }
 
     /**
@@ -88,5 +97,12 @@ class SiswaController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function flash($data)
+    {
+        Session::flash('nama', $data->nama);
+        Session::flash('nomor_induk', $data->nomor_induk);
+        Session::flash('alamat', $data->alamat);
     }
 }

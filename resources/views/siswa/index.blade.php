@@ -31,8 +31,13 @@
                     <td>{{$item['alamat']}}</td>
                     <td>
                         <a href="{{ url('/siswa/'.$item['nomor_induk']) }}">
-                            <button type="button" class="btn btn-primary">
+                            <button type="button" class="btn btn-primary btn-sm">
                                 Detail
+                            </button>
+                        </a>
+                        <a href="{{ url('/siswa/'.$item['nomor_induk'].'/edit') }}">
+                            <button type="button" class="btn btn-warning btn-sm">
+                                Edit
                             </button>
                         </a>
                     </td>
