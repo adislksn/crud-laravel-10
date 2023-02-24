@@ -40,6 +40,13 @@
                                 Edit
                             </button>
                         </a>
+                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{'/siswa/'.$item->nomor_induk}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Delete
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
