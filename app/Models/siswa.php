@@ -13,5 +13,7 @@ class siswa extends Model
         'nama',
         'nomor_induk',
         'alamat',
+        'foto',
     ];
+    protected $primaryKey = 'nomor_induk';
 }

@@ -16,6 +16,10 @@
         <label for="alamat" class="form-label">alamat</label>
         <textarea class="form-control" name="alamat">{{Session::get('alamat')}}</textarea>
     </div>
+    <div class="mb-3">
+        <label for="foto" class="form-label">NIM</label>
+        <input type="file" class="form-control" name="foto" value="{{Session::get('foto')}}">
+    </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 @endsection

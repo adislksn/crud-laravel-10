@@ -1,10 +1,12 @@
 @extends('layout.siswa')
 
 @section('konten')
+<div class="d-none">
     <h2>
         Data dlm bentuk json
     </h2>
     {{json_encode($data)}}
+</div>
 
     <h2>
         Data dalam bentuk table
@@ -17,6 +19,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Foto</th>
                 <th>Nomor Induk</th>
                 <th>Nama</th>
                 <th>Alamat</th>
@@ -26,10 +29,11 @@
         <tbody>
             @foreach ($data as $item)
                 <tr>
+                    <td><img style="max-width: 50px; max-height: 50px" src="{{ asset('storage/siswa/'.$item->foto) }}"></td>
                     <td>{{$item['nomor_induk']}}</td> {{-- atau cara lainnya $item->nomor_induk   --}}
                     <td>{{$item['nama']}}</td>
                     <td>{{$item['alamat']}}</td>
-                    <td>
+                    <td class="d-flex justify-between">
                         <a href="{{ url('/siswa/'.$item['nomor_induk']) }}">
                             <button type="button" class="btn btn-primary btn-sm">
                                 Detail

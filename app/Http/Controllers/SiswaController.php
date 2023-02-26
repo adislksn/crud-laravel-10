@@ -7,7 +7,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class SiswaController extends Controller
 {
@@ -34,25 +36,41 @@ class SiswaController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $this->flash($request);
-
+        try{
         $this->validate($request,[
             'nama'       => 'required',
             'nomor_induk'=> 'required|numeric',
-            'alamat'     => 'required'
+            'alamat'     => 'required',
+            'foto'       => 'required|mimes:jpeg,jpg,png,gif'
         ],[
             'nama.required' => 'Nama wajib diisi',
             'nomor_induk.required' => 'NIM wajib diisi',
             'nomor_induk.numeric' => 'NIM berupa angka',
             'alamat.required' => 'Alamat wajib diisi',
+            'foto.required' => 'Silahkan input foto',
+            'foto.mimes' => 'Format file tidak didukung'
         ]);
 
+        $foto = $request->file('foto');
+        $foto->storeAs('public/siswa', $foto->hashName());
         siswa::create([
             'nama'        => $request->nama,
             'nomor_induk' => $request->nomor_induk,
-            'alamat'      => $request->alamat
+            'alamat'      => $request->alamat,
+            'foto'        => $foto->hashName()
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Data berhasil dimasukkan');
+        }catch(QueryException $e){
+            // Check if the error is due to a duplicate entry on siswa_nomor_induk_unique
+            if ($e->errorInfo[1] == 1062) {
+                // Redirect the user back to the form page with an error message
+                return redirect()->back()->withInput()->withErrors(['nomor_induk' => 'NIM sudah pernah diinputkan']);
+            } else {
+                // If it's a different error, re-throw the exception
+                throw $e;
+        }
+        }
     }
 
     /**
@@ -75,19 +93,44 @@ class SiswaController extends Controller
     }
 
     /**
+     * @param  mixed $request
+     * @param  mixed $id
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id):RedirectResponse
     {
-        $data = $this->validate($request,[
+        $this->validate($request,[
             'nama'       => 'required',
-            'alamat'     => 'required'
+            'alamat'     => 'required',
         ],[
             'nama.required' => 'Nama wajib diisi',
             'nomor_induk.numeric' => 'NIM berupa angka',
             'alamat.required' => 'Alamat wajib diisi',
+            'foto.mimes' => 'Format file tidak didukung'
         ]);
-        siswa::where('nomor_induk', $id)->update($data);
+
+        $data = siswa::where('nomor_induk', $id)->first();
+        //check if image is uploaded
+        if ($request->hasFile('foto')) {
+            //upload new image
+            $foto = $request->file('foto');
+            $foto->storeAs('public/siswa', $foto->hashName());
+
+            //delete old image
+            Storage::delete('public/siswa/'.$data->foto);
+
+            //update post with new image
+            $data->update([
+                'nama'          => $request->nama,
+                'alamat'        => $request->alamat,
+                'foto'          => $foto->hashName(),
+            ]);
+        } else {
+            $data->update([
+                'nama'          => $request->nama,
+                'alamat'        => $request->alamat,
+            ]);
+        }
         return redirect()->route('siswa.index')->with('success', 'Data berhasil diubah');
     }
 
@@ -96,7 +139,9 @@ class SiswaController extends Controller
      */
     public function destroy(string $id):RedirectResponse
     {
-        siswa::where('nomor_induk', $id)->delete();
+        $siswa = siswa::where('nomor_induk', $id)->first();
+        Storage::delete('public/siswa/'.$siswa->foto);
+        $siswa->delete();
         return redirect()->route('siswa.index')->with('success', "Data berhasil dihapus");
     }
 
