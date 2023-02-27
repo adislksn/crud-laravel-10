@@ -9,8 +9,11 @@
 </head>
 <body>
     <div class="container py-5">
+        @if (Auth::check())
+            @include('components/menu')
+            @yield('konten')
+        @endif
         @include('components/pesan')
-        @yield('konten')
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
