@@ -25,3 +25,4 @@ Route::get('/kontak', [HalamanController::class, 'kontak'])->name('kontak');
 Route::get('/tentang', [HalamanController::class, 'tentang'])->name('tentang');
 
 Route::resource('/posts', \App\Http\Controllers\PostController::class);
+Route::resource('/mbd', \App\Http\Controllers\MbdController::class);
