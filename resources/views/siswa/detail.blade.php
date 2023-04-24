@@ -1,6 +1,7 @@
 @extends('layout.siswa')
 
 @section('konten')
+<a href="{{ route('siswa.index') }}" class="d-flex justify-content-end"><button class="btn btn-primary">KEMBALI</button></a>
     <div>
         <div class="w-25 h-25">
             <img class="card-img" src="{{ asset('storage/siswa/'.$data->foto) }}" >
@@ -14,10 +15,5 @@
         <p>
             Alamat : {{$data['alamat']}}
         </p>
-        <a href="{{ url('/siswa') }}">
-            <button type="button" class="btn btn-secondary">
-                Kembali
-            </button>
-        </a>
     </div>
 @endsection

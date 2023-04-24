@@ -5,6 +5,7 @@ use App\Http\Controllers\HalamanController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Middleware\isGuest;
+use App\Http\Controllers\MbdController;
 
 //id '[0-9]+ kalau nama '[A-Za-z]+'
 // Route::get('/siswa', [SiswaController::class, 'index'])->name('index');
@@ -25,4 +26,5 @@ Route::get('/kontak', [HalamanController::class, 'kontak'])->name('kontak');
 Route::get('/tentang', [HalamanController::class, 'tentang'])->name('tentang');
 
 Route::resource('/posts', \App\Http\Controllers\PostController::class);
-Route::resource('/mbd', \App\Http\Controllers\MbdController::class);
+Route::resource('/mbd', MbdController::class);
+Route::post('/mbd/search', '\App\Http\Controllers\MbdController@search');

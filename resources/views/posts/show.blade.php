@@ -20,6 +20,7 @@
                         <p class="tmt-3">
                             {!! $post->content !!}
                         </p>
+                        <a href="{{ route('posts.index') }}" class="d-flex justify-content-end"><button class="btn btn-primary">KEMBALI</button></a>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,7 @@
 @extends('layout.siswa')
 
 @section('konten')
-<a href="{{url('/siswa')}}">
-    <button class="btn btn-dark">
-        Kembali
-    </button>
-</a>
+<a href="{{ route('siswa.index') }}" class="d-flex justify-content-end"><button class="btn btn-primary">KEMBALI</button></a>
 <form action="{{ route('siswa.update', $data->nomor_induk) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')

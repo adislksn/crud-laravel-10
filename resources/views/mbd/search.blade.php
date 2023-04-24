@@ -26,7 +26,7 @@
                                 <a href="{{ route('mbd.index') }}" class="btn btn-md btn-danger mb-3">RESET LIMIT</a>
                             </div>
                             <div class="col">
-                                <form action="{{route('mbd.show')}}" method="POST">
+                                <form action="{{route('mbd.store')}}" method="POST">
                                     @csrf
                                     <div class="container">
                                         <div class="row">
@@ -52,8 +52,8 @@
                                 </form>
                             </div>
                         </div>
-                        <table class="table table-bordered" style="width: 100%">
-                            <thead class="" style="flex: 0 0 auto;">
+                        <table class="table table-bordered">
+                            <thead class="">
                                 <tr>
                                 <th scope="col">Nama</th>
                                 <th scope="col">NIM</th>
@@ -62,13 +62,13 @@
                                 <th scope="col">NomorHP</th>
                                 <th scope="col">Gol. Darah</th>
                                 <th scope="col">Riwayat Penyakit</th>
-                                {{-- <th scope="col">QR-Code</th> --}}
+                                <th scope="col">Created at</th>
                                 <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="" style="overflow-x: hidden; overflow-y: auto; flex: 1 1 auto; width: 100%;">
+                            <tbody class="">
                                 @forelse ($users_pplk as $user)
-                                <tr class="" style="width: 100%; table-layout: fixed;">
+                                <tr>
                                     {{-- <td class="text-center">
                                         <img src="{{ asset('/storage/posts/'.$post->image) }}" class="rounded" style="width: 150px">
                                     </td> --}}
@@ -79,7 +79,7 @@
                                     <td>{{ $user->nomorHp }}</td>
                                     <td>{{ $user->golonganDarah }}</td>
                                     <td>{{ $user->riwayatPenyakit }}</td>
-                                    {{-- <td>{{ $user->qrCode }}</td> --}}
+                                    <td>{{ $user->created_at }}</td>
                                     <td class="text-center">
                                         <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('mbd.destroy', $user->id) }}" method="POST">
                                             <a href="{{ route('mbd.show', $user->id) }}" class="btn btn-sm btn-dark">SHOW</a>

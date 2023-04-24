@@ -31,18 +31,37 @@ class MbdController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fromDate = $request->input('fromDate');
+        $toDate = $request->input('toDate');
+        $count = 1;
+
+        $users_pplk = Mbd::latest()->select()
+        ->where('created_at', '>=', $fromDate)
+        ->where('created_at', '<=', $toDate)
+        ->orderBy('id', 'DESC')
+        ->paginate(10, ['*'], 'sortDate', $count);
+
+        return view('mbd.search', compact('users_pplk'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id): View
+    public function show(Request $request)
     {
-        $users_pplk = Mbd::findOrFail($id);
+        // $users_pplk = Mbd::findOrFail($id);
+        $fromDate = '2022-07-01';
+        $toDate = '2022-08-01';
 
-            //render view with post
+        $users_pplk = Mbd::latest()->select()
+        ->where('created_at', '>=', $fromDate)
+        ->where('created_at', '<=', $toDate)
+        ->orderBy('id', 'DESC')
+        ->paginate(10);
+
         return view('mbd.show', compact('users_pplk'));
+            //render view with post
+        // return view('mbd.show');
     }
 
     /**
@@ -56,7 +75,7 @@ class MbdController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request , string $id)
     {
         //
     }
@@ -69,5 +88,10 @@ class MbdController extends Controller
         $users_pplk = Mbd::findOrFail($id);
         $users_pplk->delete();
         return redirect()->route('mbd.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function search(Request $request)
+    {
+        return view('mbd.search');
     }
 }

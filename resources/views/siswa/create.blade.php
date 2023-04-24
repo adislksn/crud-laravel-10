@@ -1,6 +1,7 @@
 @extends('layout.siswa')
 
 @section('konten')
+<a href="{{ route('siswa.index') }}" class="d-flex justify-content-end"><button class="btn btn-primary">KEMBALI</button></a>
 <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
